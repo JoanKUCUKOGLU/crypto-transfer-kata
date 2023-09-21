@@ -2,7 +2,7 @@
 import { getTransaction } from '@/lib/api';
 // Ok action function
 const ok = async () => {
-  console.log('Ok action', await getTransaction("test"));
+  console.log('Ok action', await getTransaction("0x9f66baea3c51e30ebdc4d7a35aba865af1f585bba0c18477d763ca0a0c17c3ed"));
 
 }
 </script>
