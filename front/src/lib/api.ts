@@ -32,3 +32,11 @@ async function post(path: string, body: any) {
 export function getTransaction(id: string) {
     return get(`/transactions/${id}`);
 }
+
+export function newWallet(): Promise<any> {
+  return post('/wallets/new', {});
+}
+
+export function transfer(from:string, to: string, amount: number) {
+  return post('/transfer', {from, to, amount: `${amount}`})
+}

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, request } from 'express';
 import { BusinessLogic } from '../interfaces/business';
 
 // force BigInt to be serialized as string in the JSON serialization
@@ -26,6 +26,30 @@ const createRouter = (bl: BusinessLogic) => {
     }
   });
 
+  router.post('/transfer', async (req, res) => {
+    try {
+      const tx = await bl.web3.createTransferTransaction(req.body.from, req.body.to, BigInt(req.body.amount))
+      const signedTx = await bl.store.signTx(req.body.from, tx);
+      const hash = await bl.web3.sendSignedTransaction(signedTx);
+      res.json({hash})
+    } catch (error) {
+      res.status(500).json({error: (error as Error).message});
+      console.error("Error in making a transfer", error);
+    }
+  });
+
+  router.post('/wallets/new', async (req, res) => {
+    console.log("Calling newWallet");
+    try {
+      const w = bl.web3.newWallet();
+      bl.store.add(w.privateKey);
+      console.log("wallet created and stored", w);
+      res.json(w);
+    } catch (error: unknown) {
+      res.status(500).json({error: (error as Error).message});
+      console.error("Error in newWallet", error);
+    }
+  });
 
   // export the router
   return router;

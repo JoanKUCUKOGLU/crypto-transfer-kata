@@ -1,13 +1,17 @@
 import express from 'express';
 import createRouter from './controller/router';
 import { Web3 } from './business/web3';
+import { WalletStoreImpl } from './business/wallet-store';
 
 // Access to the Kerleano testnet
 const impl = new Web3("https://cacib-saturn-test.francecentral.cloudapp.azure.com");
+const store = new WalletStoreImpl();
 
 // automatically refilled with 1 CRC when it goes below 0.1 CRC
 // address is 0x81744044a79528e087bDD5B87cf46Bea34735646
 const wallet1Pk = "0x28cd10f20859994826b68824502bb96351d2c970cac4ae294e096cce3d182d12";
+store.add(wallet1Pk);
+
 const w = impl.walletFromPrivateKey(wallet1Pk);
 // console.log("wallet", w);
 impl.getBalance(w.address).then(b => console.log("wallet 1 balance", w.address, ':', b)); 
@@ -24,7 +28,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(createRouter({web3: impl}));
+app.use(createRouter({web3: impl, store}));
 
 // run the express app
 app.listen(3000, () => {
