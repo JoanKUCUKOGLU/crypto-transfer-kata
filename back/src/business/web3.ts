@@ -10,13 +10,6 @@ export class Web3 implements IWeb3 {
     this.w3 = new W3(rpc);
   }
 
-  private async initCommom() {
-    if (!this.common) {
-      this.common = new Common({
-        chain: await this.w3.eth.getChainId(),
-      })
-    }
-  }
 
   async getTransaction(id: string): Promise<Transaction> {
     return this.w3.eth.getTransaction(id);
@@ -37,7 +30,6 @@ export class Web3 implements IWeb3 {
 
   async createTransferTransaction(from: string, to: string, amount: bigint): Promise<TypedTransaction> {
 
-    
     const context = Web3Context.fromContextObject(this.w3.eth.getContextObject());
     const tx = await prepareTransactionForSigning(
       {from, to, value: amount},

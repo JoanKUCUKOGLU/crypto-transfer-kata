@@ -10,10 +10,7 @@ const store = new WalletStoreImpl();
 // automatically refilled with 1 CRC when it goes below 0.1 CRC
 // address is 0x81744044a79528e087bDD5B87cf46Bea34735646
 const wallet1Pk = "0x28cd10f20859994826b68824502bb96351d2c970cac4ae294e096cce3d182d12";
-store.add(wallet1Pk);
-
-const w = impl.walletFromPrivateKey(wallet1Pk);
-// console.log("wallet", w);
+const w = store.add(wallet1Pk);
 impl.getBalance(w.address).then(b => console.log("wallet 1 balance", w.address, ':', b)); 
 
 

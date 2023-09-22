@@ -1,5 +1,5 @@
 
-import {Web3Account, privateKeyToAccount, TypedTransaction, signTransaction} from "web3-eth-accounts";
+import {Web3Account, privateKeyToAccount, TypedTransaction, signTransaction, create} from "web3-eth-accounts";
 
 export class WalletStoreImpl {
   private keys: Record<string, Web3Account>;
@@ -7,9 +7,23 @@ export class WalletStoreImpl {
     this.keys = {};
   }
 
-  add(key: string) {
+  add(key: string): Web3Account {
     const w = privateKeyToAccount(key);
     this.keys[w.address] = w;
+    return w;
+  }
+
+  newWallet(): Web3Account {
+    const w = create();
+    return this.add(w.privateKey);
+  }
+
+  get(address: string): Web3Account | undefined {
+    return this.keys[address];
+  }
+
+  list(): string[] {
+    return Object.keys(this.keys);
   }
 
   async signTx(address: string, tx: TypedTransaction): Promise<string> {

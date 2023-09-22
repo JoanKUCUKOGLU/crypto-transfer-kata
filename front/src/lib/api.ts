@@ -37,6 +37,16 @@ export function newWallet(): Promise<any> {
   return post('/wallets/new', {});
 }
 
-export function transfer(from:string, to: string, amount: number) {
-  return post('/transfer', {from, to, amount: `${amount}`})
+export async function transfer(from:string, to: string, amount: number) {
+  const r = await post('/transfer', {from, to, amount: `${amount}`})
+  return r.hash;
+}
+
+export function listWallets(): Promise<string[]> {
+    return get('/wallets');
+}
+
+export async function getBalance(address: string): Promise<string> {
+    const r = await get(`/wallets/${address}/balance`);
+    return r.balance;
 }

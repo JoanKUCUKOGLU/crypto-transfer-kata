@@ -41,8 +41,7 @@ const createRouter = (bl: BusinessLogic) => {
   router.post('/wallets/new', async (req, res) => {
     console.log("Calling newWallet");
     try {
-      const w = bl.web3.newWallet();
-      bl.store.add(w.privateKey);
+      const w = bl.store.newWallet();
       console.log("wallet created and stored", w);
       res.json(w);
     } catch (error: unknown) {
@@ -51,6 +50,27 @@ const createRouter = (bl: BusinessLogic) => {
     }
   });
 
+  router.get('/wallets', async (req, res) => {
+    console.log("Calling listWallets");
+    try {
+      const list = bl.store.list();
+      res.json(list);
+    } catch (error: unknown) {
+      res.status(500).json({error: (error as Error).message});
+      console.error("Error in listWallets", error);
+    }
+  });
+
+  router.get('/wallets/:address/balance', async (req, res) => {
+    console.log("Calling getBalance", req.params.address);
+    try {
+      const b = await bl.web3.getBalance(req.params.address);
+      res.json({wallet: req.params.address, balance: b});
+    } catch (error: unknown) {
+      res.status(500).json({error: (error as Error).message});
+      console.error("Error in getBalance", error);
+    }
+  });
   // export the router
   return router;
 
