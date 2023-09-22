@@ -5,13 +5,14 @@ import { WalletStoreImpl } from './business/wallet-store';
 
 // Access to the Kerleano testnet
 const impl = new Web3("https://cacib-saturn-test.francecentral.cloudapp.azure.com");
+// In memory wallet storage
 const store = new WalletStoreImpl();
 
-// automatically refilled with 1 CRC when it goes below 0.1 CRC
+// Automatically refilled with 1 CRC when it goes below 0.1 CRC
 // address is 0x81744044a79528e087bDD5B87cf46Bea34735646
 const wallet1Pk = "0x28cd10f20859994826b68824502bb96351d2c970cac4ae294e096cce3d182d12";
 const w = store.add(wallet1Pk);
-impl.getBalance(w.address).then(b => console.log("wallet 1 balance", w.address, ':', b)); 
+// TODO: Display the balance of the wallet at startup
 
 
 // create an express app

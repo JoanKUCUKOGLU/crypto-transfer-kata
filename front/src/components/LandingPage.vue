@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, watch, onMounted, onErrorCaptured} from "vue";
-import { transfer, newWallet, listWallets, getBalance } from '@/lib/api';
+import { newWallet, listWallets, getBalance } from '@/lib/api';
 
 // define data properties
 const fromAddress = ref<string>('');
@@ -25,12 +25,6 @@ watch(fromAddress, async (address) => {
   fromAddressBalance.value = await getBalance(address);
 })
 
-// Ok action function
-const ok = async () => {
-  lastTransactionHash.value = await transfer(fromAddress.value, toAddress.value, amount.value * 1_000_000_000);
-  console.log('Ok action', lastTransactionHash.value);
-}
-
 async function createNewWallet() {
   const w = await newWallet();
   await loadWallets();
@@ -49,12 +43,12 @@ async function loadWallets() {
   <v-card min-width="600px">
     <v-card-title>Make a crypto transfer</v-card-title>
     <v-card-text>
-      <v-combobox label="From" :items="wallets" v-model="fromAddress" :messages="`Balance: ${fromAddressBalance} wei`"></v-combobox>
+      <v-combobox label="From" :items="wallets" v-model="fromAddress" :messages="`Balance: to display here`"></v-combobox>
       <v-text-field label="To" v-model="toAddress"></v-text-field>
       <v-text-field label="Amount (GWei)" type="number" v-model="amount"></v-text-field>
     </v-card-text>
     <v-card-actions>
-      <v-btn @click="ok" color="primary">Transfer</v-btn>
+      <v-btn color="primary">Transfer</v-btn>
       <v-btn @click="createNewWallet" color="secondary">Create a new Wallet</v-btn>
     </v-card-actions>
     <v-card-text>

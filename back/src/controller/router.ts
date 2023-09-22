@@ -1,4 +1,4 @@
-import { Router, request } from 'express';
+import { Router } from 'express';
 import { BusinessLogic } from '../interfaces/business';
 
 // force BigInt to be serialized as string in the JSON serialization
@@ -28,9 +28,8 @@ const createRouter = (bl: BusinessLogic) => {
 
   router.post('/transfer', async (req, res) => {
     try {
-      const tx = await bl.web3.createTransferTransaction(req.body.from, req.body.to, BigInt(req.body.amount))
-      const signedTx = await bl.store.signTx(req.body.from, tx);
-      const hash = await bl.web3.sendSignedTransaction(signedTx);
+      // TODO: implement a crypto transfer here
+      const hash = "0x1234567890123456789012345678901234567890123456789012345678901234"
       res.json({hash})
     } catch (error) {
       res.status(500).json({error: (error as Error).message});
@@ -62,15 +61,11 @@ const createRouter = (bl: BusinessLogic) => {
   });
 
   router.get('/wallets/:address/balance', async (req, res) => {
-    console.log("Calling getBalance", req.params.address);
-    try {
-      const b = await bl.web3.getBalance(req.params.address);
-      res.json({wallet: req.params.address, balance: b});
-    } catch (error: unknown) {
-      res.status(500).json({error: (error as Error).message});
-      console.error("Error in getBalance", error);
-    }
+    // TODO: Implement the balance retrieval
+    res.json({balance: "0"});
   });
+
+
   // export the router
   return router;
 
