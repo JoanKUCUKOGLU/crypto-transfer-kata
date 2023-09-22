@@ -27,7 +27,7 @@ watch(fromAddress, async (address) => {
 
 // Ok action function
 const ok = async () => {
-  lastTransactionHash.value = await transfer(fromAddress.value, toAddress.value, amount.value);
+  lastTransactionHash.value = await transfer(fromAddress.value, toAddress.value, amount.value * 1_000_000_000);
   console.log('Ok action', lastTransactionHash.value);
 }
 
@@ -58,10 +58,10 @@ async function loadWallets() {
       <v-btn @click="createNewWallet" color="secondary">Create a new Wallet</v-btn>
     </v-card-actions>
     <v-card-text>
-      <v-alert type="success" v-if="lastTransactionHash" closable>
+      <v-alert type="success" v-if="lastTransactionHash" closable @click:close="lastTransactionHash=''">
         Transaction sent: {{lastTransactionHash}}
       </v-alert>
-      <v-alert type="error" v-if="lastError" closable>
+      <v-alert type="error" v-if="lastError" closable @click:close="lastError=''">
         {{lastError}}
       </v-alert>
     </v-card-text>
