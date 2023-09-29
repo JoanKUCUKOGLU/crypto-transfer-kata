@@ -4,7 +4,11 @@ import { Web3Account, TypedTransaction } from "web3-eth-accounts";
 export interface IWeb3 {
   getTransaction(id: string): Promise<Transaction>;
   getBalance(address: string): Promise<string>;
-  createTransferTransaction(from: string, to: string, amount: bigint): Promise<TypedTransaction>;
+  createTransferTransaction(
+    from: string,
+    to: string,
+    amount: bigint
+  ): Promise<TypedTransaction>;
   sendSignedTransaction(rawTx: string): Promise<string>;
 }
 

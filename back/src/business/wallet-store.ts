@@ -1,5 +1,10 @@
-
-import {Web3Account, privateKeyToAccount, create, TypedTransaction} from "web3-eth-accounts";
+import {
+  TypedTransaction,
+  Web3Account,
+  create,
+  privateKeyToAccount,
+  signTransaction,
+} from "web3-eth-accounts";
 import { IWalletStore } from "../interfaces/business";
 
 export class WalletStoreImpl implements IWalletStore {
@@ -7,27 +12,33 @@ export class WalletStoreImpl implements IWalletStore {
   constructor() {
     this.keys = {};
   }
-  
+
   add(key: string): Web3Account {
     const w = privateKeyToAccount(key);
     this.keys[w.address] = w;
     return w;
   }
-  
+
   newWallet(): Web3Account {
     const w = create();
     return this.add(w.privateKey);
   }
-  
+
   get(address: string): Web3Account | undefined {
-    return this.keys[address];
+    const w = this.keys[address];
+
+    return w;
   }
-  
+
   list(): string[] {
     return Object.keys(this.keys);
   }
-  
-  signTx(address: string, tx: TypedTransaction): Promise<string> {
-    throw new Error("Method not implemented.");
+
+  async signTx(address: string, tx: TypedTransaction): Promise<string> {
+    const w = this.get(address)!;
+
+    const signed = await signTransaction(tx, w.privateKey);
+
+    return signed.rawTransaction;
   }
 }
